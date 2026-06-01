@@ -62,6 +62,10 @@ def signup_for_activity(activity_name: str, email: str):
     # Get the specific activity
     activity = activities[activity_name]
 
+    # Validate email is not empty
+    if not email.strip():
+        raise HTTPException(status_code=400, detail="Email must not be empty")
+
     # Prevent duplicate signups
     if email in activity["participants"]:
         raise HTTPException(status_code=409, detail="Already signed up")

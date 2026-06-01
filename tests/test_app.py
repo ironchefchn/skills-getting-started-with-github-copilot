@@ -101,3 +101,18 @@ def test_capacity_enforced(client):
     data = resp.json()
     assert data.get("detail") == "Activity is full"
     assert email not in activities[activity]["participants"]
+
+
+def test_signup_empty_email_rejected(client):
+    # Arrange
+    activity = "Chess Club"
+    email = "   "
+
+    # Act
+    resp = client.post(f"/activities/{activity}/signup", params={"email": email})
+
+    # Assert
+    assert resp.status_code == 400
+    data = resp.json()
+    assert data.get("detail") == "Email must not be empty"
+    assert email.strip() not in activities[activity]["participants"]
